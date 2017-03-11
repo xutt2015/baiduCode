@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+  <head>
+    <title>图片的无缝滚动  by sjq</title>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+    h1 {
+      font:400 16px/1 "Microsoft YaHei",KaiTi_GB2312,SimSun
+    }
+    #marquee {
+      width: 500px;
+      height: 400px;
+      padding:0;
+      margin:0;
+      overflow: hidden;
+    }
+    #marquee {
+      position:relative;
+      list-style:none;
+      border:10px solid #369;
+    }
+    #marquee li {
+      position:absolute;
+      margin: 0px;
+      padding: 0px;
+    }
+    #marquee img{
+      margin: 0px;
+      padding: 0px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>图片的无缝滚动 by sjq</h1>
+  <ul id="marquee">
+    <li>
+      <img id="index1" src="img/1.jpg" />
+      <img id="index2" src="img/2.jpg" />
+      <img id="index2" src="img/3.jpg" />
+      <img id="index2" src="img/4.jpg" />
+      <img id="index2" src="img/5.jpg" />
+      <img id="index2" src="img/6.jpg" />
+    </li>
+  </ul>
+</body>
+<script type="text/javascript">
+
+  var Marquee = function(id,direction,speed){
+
+    //为了防止在ie6及以下的浏览器出现图片一闪的现象
+    try{document.execCommand("BackgroundImageCache", false, true);}catch(e){};
+
+    var container = document.getElementById(id),
+    slide = container.getElementsByTagName("li")[0],
+    img= container.getElementsByTagName("img"),
+    speed = parseInt(speed)|| 10,//默认速度为10
+    imgNum=img.length; //获取图片的数量
+
+    //获取容器设定的宽度，用于设定img的宽度，使得图片自适应容器的大小。
+    cWidth=window.getComputedStyle(container , null)['width'];
+    cHeight=window.getComputedStyle(container , null)['height'];
+    cWidth=+cWidth.slice(0,cWidth.length-2);
+    cHeight=+cHeight.slice(0,cHeight.length-2);
+
+    //设置图片的样式，float:left;所以不管在什么情况下，图片与图片之间都是无缝连接的，后面只需要改动slide宽度，就可以改变图片的排列方式了,水平竖直无缝切换
+    for(var i=0 ,l=img.length; i<l;i++){
+      img[i].style.cssText = "float:left;width:"+cWidth+"px;height:"+cHeight+"px";
+    }
+    
+    //console.log(container.getElementsByTagName("li")[0].offsetHeight);//400
+    //console.log(container.getElementsByTagName("img")[0].offsetHeight);//400
+    //console.log("container.scrollTop"+container.scrollTop);//0
+
+    //将宽度变为两倍这样可以容下两倍的图片,即默认是水平排列，同时复制一份自身加到原来图像上
+    slide.style.width=imgNum*2*cWidth+"px";
+    slide.innerHTML += slide.innerHTML;
+
+    //水平和竖直方向上的临界点
+    var horizontal = slide.offsetWidth/2,
+        vertical=imgNum*cHeight;
+    console.log("slide.offsetWidth:"+slide.offsetWidth);
+
+    //console.log(container.getElementsByTagName("li")[0].offsetHeight);//400
+    //console.log("img[0].height"+img[0].height);//400
+
+    //根据方向选取不同运动方式
+    switch(direction){
+      //刚开始距离左边为0
+      case "left":
+        var delta = 0;
+        var rolling = function(){
+          delta == -horizontal ? delta = 0 : delta--;
+          slide.style.left = delta + "px";
+        }
+        break;
+
+      //刚开始定位到复制的那一份的位置，然后在滚动，滚动到头的时候，再切换回去
+      case "right":
+        var delta=-horizontal; 
+        var rolling = function(){
+          delta == 0 ? delta = -horizontal : delta++;
+          slide.style.left = delta + "px";
+        }
+        break;
+
+      //刚开始距离上边为0
+      case "up":
+        //slide.style.width是要有px的，而img[0].width是没有px的，只是数值
+        slide.style.width=img[0].width+"px";//这样图片只能竖着排列
+        //console.log(img[0].width); //500
+        var delta=0;
+        var rolling = function(){
+          delta == -vertical ? delta = 0 : delta--;
+          slide.style.top = delta + "px";
+        }
+        break;
+
+      case "down":
+        slide.style.width=img[0].width+"px";;
+        var delta=-vertical;
+        var rolling = function(){
+          delta == 0 ? delta = -vertical : delta++;
+          slide.style.top = delta + "px";
+        }
+        break;
+    }
+
+    var timer = setInterval(rolling,speed)//设置定时器
+
+    container.onmouseover=function() {clearInterval(timer)}//鼠标移到marquee上时，清除定时器，停止滚动
+    container.onmouseout=function() {timer=setInterval(rolling,speed)}//鼠标移开时重设定时器
+  }
+
+  window.onload = function(){
+    Marquee("marquee","down","ttt");
+  }
+</script>
+</html>
