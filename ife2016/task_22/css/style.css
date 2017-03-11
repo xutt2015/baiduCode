@@ -1,0 +1,45 @@
+#root,
+#root div {
+    display: flex;
+    position: relative;
+    min-width: 50px;
+    justify-content: space-around;
+    height: 50px;
+    border-radius: 100%;
+    margin: 100px 10px;
+    border: 1px solid #000;
+    background-color: red;
+}
+button {
+    width: 50px;
+    background-color: red;
+    color: #fff;
+    margin-top: 20px;
+}
+.left {
+    left: -50px;
+}
+.right {
+    right: -50px;
+}
+.left:before,
+.right:before {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 58px;
+    bottom: 52px;
+    left: 50%;
+    transform-origin: bottom;
+    background-color: red;
+}
+.left:before {
+    transform: rotateZ(30deg);
+}
+.right:before {
+    transform: rotateZ(-30deg);
+}
+.checked {
+    background-color: blue;
+}
