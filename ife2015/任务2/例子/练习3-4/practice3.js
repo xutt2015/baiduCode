@@ -81,7 +81,6 @@ function VQuery(selector, root) {
             }
             break;
         case "[": //属性选择器
-
             if (selector.indexOf("=") === -1) {
                 //只有属性没有值的情况
                 allChildren = root.getElementsByTagName("*");
@@ -128,24 +127,39 @@ function $(selector) {
         var Dom = {};
         for (var i = 0; i < selectorArr.length; i++) {
             if (i == 0) {
-                dom = [];
-                for (var p = 0; p < VQuery(selectorArr[i], null).length; p++) {
-                    dom.push(VQuery(selectorArr[i], null)[p]);
-                }
-                Dom[i] = dom;
-            }
-            else {
-                dom = [];
-                var DomLength = Dom[i - 1].length;
-                for (var m = 0; m < DomLength; m++) {
-                    if (VQuery(selectorArr[i], Dom[i - 1][m])[0] != null) {
-                        for (var p = 0; p < VQuery(selectorArr[i], Dom[i - 1][m]).length; p++) {
-                            dom.push(VQuery(selectorArr[i], Dom[i - 1][m])[p]);
-                        }
-                        Dom[i] = dom;
+              Dom[i] = [...VQuery(selectorArr[i], null)];
+          }
+          else {
+              dom = [];
+              var DomLength = Dom[i - 1].length;
+              for (var m = 0; m < DomLength; m++) {
+                  if(Dom[i]===undefined){
+                      Dom[i]=[...VQuery(selectorArr[i], Dom[i - 1][m])]; 
                     }
-                }
-            }
+                    else{
+                      Dom[i]=Dom[i].concat([...VQuery(selectorArr[i], Dom[i - 1][m])]); 
+                    }   
+              }
+          }
+            // if (i == 0) {
+            //     dom = [];
+            //     for (var p = 0; p < VQuery(selectorArr[i], null).length; p++) {
+            //         dom.push(VQuery(selectorArr[i], null)[p]);
+            //     }
+            //     Dom[i] = dom;
+            // }
+            // else {
+            //     dom = [];
+            //     var DomLength = Dom[i - 1].length;
+            //     for (var m = 0; m < DomLength; m++) {
+            //         if (VQuery(selectorArr[i], Dom[i - 1][m])[0] != null) {
+            //             for (var p = 0; p < VQuery(selectorArr[i], Dom[i - 1][m]).length; p++) {
+            //                 dom.push(VQuery(selectorArr[i], Dom[i - 1][m])[p]);
+            //             }
+            //             Dom[i] = dom;
+            //         }
+            //     }
+            // }
         }
         return Dom[selectorArr.length - 1];
     } else { //普通情况,只返回获取到所有对象
