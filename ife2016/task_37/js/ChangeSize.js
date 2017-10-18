@@ -74,30 +74,6 @@ var ChangeSize=(function() {
         recordTarget='';
     }
 
-    //获得元素与窗口左端的距离
-    function getElementLeft(element) {
-        var Left = element.offsetLeft,
-            parent = element.offsetParent;
-
-        while (parent != null) {
-            Left += parent.offsetLeft;
-            parent = parent.offsetParent;
-        }
-        return Left;
-    }
-
-    //获得元素与窗口顶部的距离
-    function getElementTop(element) {
-        var Top = element.offsetTop,
-            parent = element.offsetParent;
-
-        while (parent != null) {
-            Top += parent.offsetTop;
-            parent = parent.offsetParent;
-        }
-        return Top;
-    }
-
     function createBtnNode() {
         var div = document.createElement('div');
         div.style =

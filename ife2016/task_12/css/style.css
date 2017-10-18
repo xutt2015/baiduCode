@@ -167,7 +167,7 @@
     overflow: hidden;
 }
 .bn_wrap {
-    display: flex;
+/*    display: flex;*/
     position: absolute;
     height: 100%;
     width: 300%;
@@ -214,7 +214,6 @@
     z-index: 10;
     bottom: 0;
     right: 0;
-
 }
 [class*='bn_change_'] {
     margin-left: 2px;
